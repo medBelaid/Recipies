@@ -1,0 +1,24 @@
+<div class='collapse navbar-collapse' ng_controller='navCtrl'>
+  <ul class='nav navbar-nav spacer'>
+    <li>
+      <a href='#/home'>Home</a>
+    </li>
+    <li ng_show='signedIn()'>
+      <a href='#/recipes'>Recipes</a>
+    </li>
+  </ul>
+  <ul class='nav navbar-nav spacer pull-right'>
+    <li ng_hide='signedIn()'>
+      <a class='user-icon' href='#/login'>
+        Log In
+      </a>
+    </li>
+    <li ng_show='signedIn()'>
+      <a class='user-icon' href='#/profile'>{{user.name}}</a>
+    </li>
+    <li ng_show='signedIn()'>
+      <a ng_click='logout()'>Log Out</a>
+    </li>
+  </ul>
+  <i class='fa fa-user pull-right spacer'></i>
+</div>

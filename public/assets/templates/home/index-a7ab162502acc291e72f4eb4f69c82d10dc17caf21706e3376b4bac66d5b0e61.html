@@ -1,0 +1,13 @@
+<div class='home-container' ng_controller='homeCtrl' ng_init='getPage(1)'>
+  <div id='search'>
+    <label for='search-input'>
+      <i class='fa fa-search'></i>
+    </label>
+    <input class='form-control  search-query' id='search-input' ng_model='searchRecipe' placeholder='Search'>
+    <a class='fa fa-times-circle' id='search-clear' ng_click='searchRecipe = null' ng_show='searchRecipe' tabindex='1'></a>
+  </div>
+  <div id='recipes'>
+    <list-recipes></list-recipes>
+  </div>
+  <div class='willPaginate pull-right' data_config='willPaginateConfig' data_on_click='getPage' data_params='willPaginateCollection'></div>
+</div>

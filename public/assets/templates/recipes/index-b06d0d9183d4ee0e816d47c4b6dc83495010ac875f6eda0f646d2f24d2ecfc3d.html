@@ -1,0 +1,45 @@
+<form class='spacer' enctype='multipart/form-data' ng_submit='saveRecipe(newRecipe)'>
+  <div class='btn-group pull-right'>
+    <input class='btn btn-default grisLite' type='submit' value='Enregistrer'>
+    <input class='btn btn-default' type='reset' value='Vider'>
+  </div>
+  <br>
+  <label class='spacer'>Title:</label>
+  <input class='form-control' ng_model='newRecipe.title'>
+  <label>Content:</label>
+  <textarea class='form-control' ng_model='newRecipe.content'></textarea>
+  <input class='form-control spacer' ng_model='newRecipe.image' type='file'>
+  <h2 class='spacer'>Ingredients</h2>
+  <div class='row'>
+    <div class='col-sm-11' ng_repeat='ing in ingredients'>
+      <input class='form-control input-sm' ng_model='ing.name'>
+    </div>
+    <div class='col-sm-1'>
+      <span class='btn btn-success fa fa-plus clickable' ng_click='addIngredientToList()'></span>
+    </div>
+  </div>
+</form>
+<div class='alert alert-success hide spacer' id='notice'>
+  {{notice}}
+</div>
+<div id='recipes'>
+  <div ng_repeat='r in recipes'>
+    <div class='recipe row'>
+      <div class='recipe_image col-sm-3'>
+        <img src='/assets/Crepe_Sweet.jpg'>
+      </div>
+      <div class='recipe_content col-sm-7'>
+        <div class='title'>
+          <a href='#/recipe?id={{r.id}}'>
+            <h2>{{r.title}}</h2>
+          </a>
+        </div>
+        <p>{{r.content}}</p>
+      </div>
+      <div class='col-sm-2'>
+        <button class='fa fa-pencil-square-o btn btn-sm' ng_click='goToEdit(r)'></button>
+        <button class='fa fa-trash btn btn-sm' ng_click='deleteRecipe(r)'></button>
+      </div>
+    </div>
+  </div>
+</div>

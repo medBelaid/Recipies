@@ -1,0 +1,126 @@
+I"�(function() {
+  this.cooking.controller('recipesCtrl', function($scope, $log, Auth, Recipe, Recipes, Ingredient, FileUploader, $routeParams) {
+    $scope.newRecipe = {};
+    $scope.ingredients = [];
+    $scope.recipes = [];
+    $scope.idUser = 0;
+    $scope.recipeToDelete = {};
+    $scope.allIngredients = Ingredient.query();
+    $scope.uploader = new FileUploader({
+      url: '/recipes'
+    });
+    $scope.intermediateIngredient = {};
+    $scope.newIngredient = {};
+    $scope.addIngredientToList = function(ingredient) {
+      var i, ing, len, ref, test;
+      test = false;
+      $log.info(ingredient.name);
+      ingredient.newIng = true;
+      ref = $scope.ingredients;
+      for (i = 0, len = ref.length; i < len; i++) {
+        ing = ref[i];
+        if (angular.equals(ing.name, ingredient.name)) {
+          test = true;
+        }
+      }
+      if (!test) {
+        $scope.ingredients.push(ingredient);
+      } else {
+        $scope.notice = 'l\'ingrédient ' + ingredient.name + ' existe !!';
+        $('#notice').addClass('hide');
+      }
+      $scope.newIngredient = {};
+      $scope.intermediateIngredient = {};
+      if (!$('#notice').hasClass('hide')) {
+        return $('#notice').addClass('hide');
+      }
+    };
+    Auth.currentUser().then(function(user) {
+      $scope.user = user;
+      $log.info($scope.user);
+      $scope.newRecipe.user_id = $scope.user.id;
+      return $scope.idUser = $scope.user.id;
+    });
+    Recipes.$promise.then(function(res) {
+      var i, intermediate, len, recipe, results;
+      intermediate = res;
+      results = [];
+      for (i = 0, len = intermediate.length; i < len; i++) {
+        recipe = intermediate[i];
+        if (recipe.user_id === $scope.idUser) {
+          results.push($scope.recipes.push(recipe));
+        } else {
+          results.push(void 0);
+        }
+      }
+      return results;
+    });
+    $scope.saveRecipe = function(recipe) {
+      $scope.newRecipe.rate = 4;
+      if (angular.isDefined(recipe.id)) {
+        $scope.editRecipe(recipe);
+        return $log.info('edit');
+      } else {
+        $scope.addRecipe(recipe);
+        return $log.info('add');
+      }
+    };
+    $scope.addRecipe = function(recipe) {
+      return Recipe.recipes(1).save(recipe).$promise.then(function(res) {
+        var i, ingredient, len, ref;
+        $scope.recipes.unshift(res);
+        ref = $scope.ingredients;
+        for (i = 0, len = ref.length; i < len; i++) {
+          ingredient = ref[i];
+          Ingredient.save({
+            ingredient: ingredient,
+            recipe_id: res.id
+          });
+        }
+        $scope.newRecipe = {};
+        $scope.ingredients = [];
+        $scope.notice = 'l\'ajout de recette ' + res.title + ' est effectuée';
+        return $('#notice').removeClass('hide');
+      });
+    };
+    $scope.editRecipe = function(recipe) {
+      var i, ingredient, len, ref;
+      ref = $scope.ingredients;
+      for (i = 0, len = ref.length; i < len; i++) {
+        ingredient = ref[i];
+        if (ingredient.newIng) {
+          Ingredient.save({
+            ingredient: ingredient,
+            recipe_id: recipe.id
+          });
+        }
+      }
+      Recipe.recipes(1).update(recipe);
+      $scope.newRecipe = {};
+      $scope.ingredients = [];
+      window.scrollTo(0, 0);
+      $scope.notice = 'l\'édition de recette ' + recipe.title + ' est effectuée';
+      return $('#notice').removeClass('hide');
+    };
+    return $scope.goToEdit = function(recipe) {
+      $scope.newRecipe = recipe;
+      window.scrollTo(0, 0);
+      return Ingredient.query({
+        recipe_id: recipe.id
+      }).$promise.then(function(res) {
+        var i, ingredient, len, ref;
+        $scope.ingredients = res;
+        ref = $scope.ingredients;
+        for (i = 0, len = ref.length; i < len; i++) {
+          ingredient = ref[i];
+          ingredient.newIng = false;
+        }
+        if (!$('#notice').hasClass('hide')) {
+          return $('#notice').addClass('hide');
+        }
+      });
+    };
+  });
+
+}).call(this);
+:ET

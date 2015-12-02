@@ -1,0 +1,18 @@
+<div ng_repeat='r in recipes | filter:searchRecipe'>
+  <div class='recipe row'>
+    <div class='recipe_image col-sm-3'>
+      <img src='/assets/Crepe_Sweet.jpg'>
+    </div>
+    <div class='recipe_content col-sm-9'>
+      <div class='title'>
+        <a ng_href='#/recipe?id={{r.id}}'>{{r.title}}</a>
+      </div>
+      <p>{{r.content}}</p>
+    </div>
+    <div class='recipe_content pull-right'>
+      <div class='username'>
+        publié: {{r.created_at | date:" dd/MM/yyyy"}} par {{r.username.name}}
+      </div>
+    </div>
+  </div>
+</div>

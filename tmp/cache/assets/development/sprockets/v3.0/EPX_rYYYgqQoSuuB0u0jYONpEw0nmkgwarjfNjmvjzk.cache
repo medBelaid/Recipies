@@ -1,0 +1,48 @@
+I"‚(function() {
+  this.cooking.directive('listRecipes', function($compile, $resource) {
+    return {
+      templateUrl: 'assets/templates/home/recipes-list.html.haml',
+      restrict: 'E',
+      link: function(scope) {
+        return {
+          controller: function($scope) {}
+        };
+      }
+    };
+  });
+
+  this.cooking.directive('popupDelete', function($compile, $resource) {
+    return {
+      templateUrl: 'assets/templates/recipes/popup.html.haml',
+      restrict: 'E',
+      link: function(scope) {},
+      controller: function($scope) {
+        $scope.recipeToDelete = {};
+        $scope.goToDeletePopup = function(recipe) {
+          $('#popup').fadeIn('slow');
+          $('#black_overlay').fadeIn();
+          $scope.recipeToDelete = recipe;
+          return false;
+        };
+        $scope.cancelDelete = function() {
+          $('#popup').fadeOut('slow');
+          $('#black_overlay').fadeOut();
+          return false;
+        };
+        return $scope.deleteRecipe = function() {
+          return Recipe.recipes(1)["delete"]($scope.recipeToDelete).$promise.then(function(res) {
+            var index;
+            index = $scope.recipes.indexOf(res);
+            $scope.recipes.splice(index, 1);
+            window.scrollTo(0, 0);
+            $scope.cancelDelete();
+            $scope.notice = 'la suppression de recette ' + $scope.recipeToDelete.title + ' est effectu√©e';
+            return $('#notice').removeClass('hide');
+          });
+        };
+      }
+    };
+  });
+
+}).call(this);
+:ET

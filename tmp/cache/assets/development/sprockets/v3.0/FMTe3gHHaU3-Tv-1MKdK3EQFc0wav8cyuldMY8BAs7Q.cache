@@ -1,0 +1,50 @@
+I"Ñ(function() {
+  this.cooking.service('Recipe', function($resource) {
+    var recipes;
+    recipes = function(page) {
+      var response;
+      response = $resource('/recipes/:id', {
+        id: '@id',
+        page: page,
+        mode: '@mode',
+        userId: '@userId'
+      }, {
+        update: {
+          method: "PUT"
+        }
+      });
+      return response;
+    };
+    return {
+      recipes: recipes
+    };
+  });
+
+  this.cooking.service('Ingredient', function($resource) {
+    return $resource('ingredients/:id', {
+      id: '@id',
+      recipe_id: '@recipe_id',
+      mode: '@mode'
+    }, {
+      update: {
+        method: "PUT"
+      }
+    });
+  });
+
+  this.cooking.service('Favorite', function($resource) {
+    return $resource('/recipes/:id/favorite', {
+      id: '@id'
+    }, {
+      update: {
+        method: "PUT"
+      }
+    });
+  });
+
+  this.cooking.factory('Recipes', function($resource, Recipe) {
+    return Recipe.recipes(1).query();
+  });
+
+}).call(this);
+:ET

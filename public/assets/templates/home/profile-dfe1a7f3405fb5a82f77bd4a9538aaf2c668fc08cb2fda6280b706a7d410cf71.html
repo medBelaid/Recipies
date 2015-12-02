@@ -1,0 +1,45 @@
+<div class='spacer' ng_show='viewProfile'>
+  <h2>{{userProfile.name}}</h2>
+  <h3 class='spacer'>{{userProfile.email}}</h3>
+  <div class='row col-sm-12'>
+    <a class='btn btn-info pull-right' ng_click='getRecipiesUser(userProfile.id)'>
+      Voir Recettes
+    </a>
+  </div>
+  <div class='col-sm-4' id='usersList' ng_repeat='u in userss' ng_show='u.id!=userProfile.id'>
+    <div class='user spacer'>
+      <div class='user_image'>
+        <img src='/assets/user.png'>
+      </div>
+      <div class='user_content'>
+        <h2>
+          <a class='btn' ng_click='getUser(u.id)'>{{u.name}}</a>
+        </h2>
+      </div>
+    </div>
+  </div>
+</div>
+<div class='spacer' ng_show='!viewProfile'>
+  <button class='btn-default btn-block' ng_click='viewProfile=true'>retour</button>
+  <div class='col-sm-4' id='favorite_recipe' ng_repeat='fr in recipes'>
+    <div class='recipe spacer'>
+      <div class='recipe_image'>
+        <img src='/assets/Crepe_Sweet.jpg'>
+      </div>
+      <div class='recipe_content'>
+        <h2>
+          <a ng_href='#/recipe?id={{fr.id}}'>
+            {{fr.title}}
+          </a>
+        </h2>
+        <div class='data clearfix'>
+          <p class='buttons'>
+            <span>
+              {{fr.created_at | date:" dd/MM/yyyy"}}
+            </span>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
